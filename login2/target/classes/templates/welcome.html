@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>會員首頁</title>
+<style>
+    /*
+     * CSS 變數的定義：
+     * 這裡定義了多個主題的 CSS 變數。
+     * 'body' 上的 CSS class (例如 .dark-theme) 會覆蓋 :root 中的變數，實現主題切換。
+     *
+     * 請確保您的 CSS 變數名稱與您的主題定義相符。
+     */
+    :root {
+        /* 預設的淺色主題 (例如：light-theme 或 default theme) */
+        --bg-primary: #f4f7f6;
+        --bg-secondary: #e0e0e0;
+        --text-light: #333;
+        --text-dark: #000;
+        --bg-bot-input: #e0e0e0;
+        --text-bot: #333;
+        --bg-user: #c0c0c0;
+        --text-user: #000;
+        --border-input: #ccc;
+        --placeholder: #666;
+        --btn-disabled: #bbb;
+        --text-link: #007bff; /* 預設連結顏色 */
+        --btn-danger-bg: #dc3545; /* 刪除按鈕背景色 */
+        --btn-danger-hover-bg: #c82333; /* 刪除按鈕 hover 色 */
+        --btn-text-color: white; /* 按鈕文字顏色 */
+    }
+
+    body {
+        font-family: sans-serif;
+        margin: 20px;
+        /* 使用 CSS 變數來控制背景色和文字顏色，這樣主題切換時會改變 */
+        background-color: var(--bg-primary);
+        color: var(--text-light);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+        transition: background-color 0.3s ease, color 0.3s ease; /* 添加平滑過渡效果 */
+    }
+
+    h2 {
+        color: var(--text-dark); /* 標題使用深色文字，如果未定義則用預設 */
+        margin-bottom: 20px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    a {
+        color: var(--text-link); /* 連結顏色使用變數 */
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover { text-decoration: underline; }
+
+    form { margin-top: 20px; }
+
+    button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, color 0.3s ease; /* 添加過渡效果 */
+        background-color: var(--btn-danger-bg); /* 使用變數 */
+        color: var(--btn-text-color); /* 使用變數 */
+    }
+    button[type="submit"]:hover {
+        background-color: var(--btn-danger-hover-bg); /* 使用變數 */
+    }
+
+    select {
+        padding: 8px 12px;
+        border: 1px solid var(--border-input);
+        border-radius: 4px;
+        background-color: var(--bg-secondary);
+        color: var(--text-light);
+        font-size: 16px;
+        cursor: pointer;
+    }
+    select:focus {
+        outline: none;
+        border-color: var(--text-link);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+
+
+    /* --- 各佈景主題的 CSS Class 定義 --- */
+    /* 當 body 元素被添加這些 class 時，它們會覆蓋 :root 的預設變數 */
+
+    body.dark-theme {
+        --bg-primary: #0d0d0d;
+        --bg-secondary: #1a1a1a;
+        --text-light: #c0c0c0;
+        --text-dark: #f0f0f0;
+        --bg-bot-input: #2a2a2a;
+        --text-bot: #e0e0e0;
+        --bg-user: #3a3a3a;
+        --text-user: #f0f0f0;
+        --border-input: #4a4a4a;
+        --placeholder: #7a7a7a;
+        --btn-disabled: #5a5a5a;
+        --text-link: #8ab4f8; /* 深色主題的連結顏色 */
+        --btn-danger-bg: #8b0000;
+        --btn-danger-hover-bg: #a00000;
+    }
+
+    body.blue-theme {
+        --bg-primary: #e0f2f7;
+        --bg-secondary: #c8e6f0;
+        --text-light: #2c3e50;
+        --text-dark: #1f2d3d;
+        --bg-bot-input: #a7d9ec;
+        --text-bot: #2c3e50;
+        --bg-user: #8ed0e8;
+        --text-user: #ffffff;
+        --border-input: #6dc0d7;
+        --placeholder: #5fa4b7;
+        --btn-disabled: #94b9c5;
+        --text-link: #1565c0;
+        --btn-danger-bg: #d32f2f;
+        --btn-danger-hover-bg: #b71c1c;
+    }
+
+</style>
+</head>
+<body>
+	<h2>
+		歡迎, <span th:text="${name}"></span>！
+	</h2>
+
+    <p>
+        您的貨幣餘額：<span th:text="${userCoin}"></span>
+    </p>
+
+    <p>
+        選擇佈景主題：
+        <select id="themeSelector">
+            <option th:each="themeName : ${availableThemes}"
+                    th:value="${themeName}"
+                    th:text="${#strings.capitalize(themeName)}" th:selected="${themeName == currentTheme}">
+            </option>
+        </select>
+    </p>
+
+	<p>
+		<a th:href="@{/logout}">登出</a>
+	</p>
+	<p>
+        <a th:href="@{/change-password}">修改密碼</a>
+    </p>
+	
+	<form th:action="@{/delete-account}" method="post" onsubmit="return confirm('確定要刪除帳號嗎？此操作無法復原！');">
+		<button type="submit">刪除帳號</button>
+	</form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeSelector = document.getElementById('themeSelector');
+            const body = document.body;
+
+            // 1. 初始化時應用主題
+            // 優先從後端 Model 獲取當前主題 (themeSelector.value 是由 th:selected 決定的)
+            // 如果後端沒有傳送，則嘗試從 localStorage 獲取，最後預設為 'default'
+            const initialTheme = themeSelector.value || localStorage.getItem('selectedTheme') || 'default';
+            applyTheme(initialTheme);
+
+
+            // 2. 監聽下拉選單的變化事件
+            themeSelector.addEventListener('change', function() {
+                const selectedTheme = this.value;
+                applyTheme(selectedTheme); // 應用新的主題
+
+                // 3. 將用戶選擇的主題儲存到 localStorage，以便下次頁面刷新時自動應用
+                localStorage.setItem('selectedTheme', selectedTheme);
+
+                // 4. 發送 AJAX 請求到後端，將用戶選擇的主題儲存到資料庫
+                // fetch 是現代瀏覽器中用於發送網路請求的 API
+                fetch('/saveTheme', {
+                    method: 'POST', // 使用 POST 方法
+                    headers: {
+                        'Content-Type': 'application/json', // 請求體是 JSON 格式
+                        'Accept': 'application/json' // 期望響應也是 JSON 格式
+                    },
+                    // 將選中的主題名稱轉換為 JSON 字串作為請求體
+                    body: JSON.stringify({ theme: selectedTheme }),
+                })
+                .then(response => {
+                    if (!response.ok) { // 如果響應狀態碼不是 2xx (成功)
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json(); // 解析 JSON 響應
+                })
+                .then(data => {
+                    console.log('主題儲存成功:', data.message); // 輸出後端返回的訊息
+                    if (data.status === 'error') {
+                        // 可以在這裡顯示錯誤訊息給用戶
+                        alert('更新主題失敗: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('儲存主題失敗:', error); // 捕獲並輸出錯誤
+                    alert('更新主題時發生錯誤，請檢查網路或稍後再試。');
+                });
+            });
+
+            // 應用佈景主題的函數
+            function applyTheme(themeName) {
+                // 移除所有可能存在的舊主題 class
+                // 遍歷 body 的所有 class，如果它以 '-theme' 結尾，就移除它
+                // 這樣可以避免多個主題 class 並存導致樣式衝突
+                Array.from(body.classList).forEach(cls => {
+                    if (cls.endsWith('-theme')) {
+                        body.classList.remove(cls);
+                    }
+                });
+
+                // 如果主題名稱不是 'default' (或者您認為不需要額外 class 的基礎主題)
+                // 就添加對應的 class 到 body 元素
+                if (themeName && themeName !== 'default') {
+                    body.classList.add(themeName + '-theme');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
