@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>測驗結果</title>
+
+<style>
+:root {
+	--bg-primary: #0d0d0f;
+	--bg-secondary: #1a1a1c;
+	--text-light: #c3c3c3;
+	--bg-bot-input: #2a2a2e;
+	--text-bot: #e5e7eb;
+	--bg-user: #3e3e42;
+	--text-user: #f3f4f6;
+	--border-input: #2c2c2e;
+	--accent-green: #61f6d6;
+}
+
+body {
+	margin: 0;
+	background: var(--bg-primary);
+	color: var(--text-light);
+	font-family: "Noto Sans TC", Arial, sans-serif;
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--bg-secondary);
+	padding: 16px 24px;
+}
+
+.main-container {
+ 	width: 100%;
+	max-width:  1200px;
+	margin: 40px auto;
+	padding: 20px;
+	background: var(--bg-secondary);
+	border-radius: 12px;
+	border: 1px solid var(--border-input);
+}
+
+.result-summary {
+  background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border-input);
+      text-align: center;
+}
+
+
+.question-container {
+	margin-bottom: 30px;
+	padding: 20px;
+	background: var(--bg-primary);
+	border: 1px solid var(--border-input);
+	border-radius: 8px;
+	
+}
+
+.question-header {
+	display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.question-text {
+  margin-bottom: 12px; /* ✅ 加大題目和選項間的距離 */
+  font-size: 1.05em;
+  line-height: 1.6;
+}
+.question-status {
+	padding: 4px 12px;
+	font-size: 0.9em;
+	font-weight: bold;
+	border-radius: 4px;
+	color: #fff;
+}
+
+.status-correct {
+	background: #10b981;
+}
+
+.status-incorrect {
+	background: #ef4444;
+}
+
+.options {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+
+.option {
+	padding: 12px 16px;
+	border-radius: 6px;
+	background: var(--bg-bot-input);
+	border: 1px solid var(--border-input);
+}
+
+.option.correct {
+	background: #10b981;
+	color: #fff;
+	font-weight: bold;
+}
+
+.option.incorrect {
+	background: #ef4444;
+	color: #fff;
+}
+
+.option.user-wrong {
+	background: #fca5a5;
+	color: #000;
+}
+
+details {
+	border: 1px solid var(--border-input);
+	background: var(--bg-bot-input);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+summary {
+	padding: 12px 16px;
+	cursor: pointer;
+	font-weight: bold;
+	background: var(--bg-user);
+}
+
+.explanation {
+	padding: 16px;
+	background: var(--bg-primary);
+	color: var(--text-bot);
+}
+
+.button-group {
+	text-align: center;
+	margin-top: 32px;
+}
+
+button {
+	padding: 10px 20px;
+	background: var(--border-input);
+	color: var(--text-light);
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	margin: 0 12px;
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--bg-secondary);
+	color: var(--text-light);
+	padding: 16px 24px;
+	font-size: 1.3em;
+}
+
+.navbar-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 0 24px;
+	box-sizing: border-box;
+}
+
+.nav-links {
+	display: flex;
+	gap: 30px;
+}
+
+.nav-links>div {
+	position: relative;
+	padding: 0 1rem;
+	cursor: pointer;
+	color: var(--text-light);
+}
+
+.nav-links>div::before, .nav-links>div::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--text-light);
+	transform: scaleX(0);
+	transition: transform 0.15s ease;
+}
+
+.nav-links>div::before {
+	top: -16px;
+}
+
+.nav-links>div::after {
+	bottom: -16px;
+}
+
+.nav-links>div:hover {
+	color: #fff;
+}
+
+.nav-links>div:hover::before, .nav-links>div:hover::after {
+	transform: scaleX(1);
+}
+
+footer {
+	text-align: center;
+	padding: 20px;
+	background: var(--bg-secondary);
+	color: var(--text-light);
+	margin-top: 80px;
+}
+.section-title {
+  text-align: center;
+  font-size: 2em; /* ⬅️ 原本 28px，改成更大 */
+  font-weight: bold;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 4px solid var(--accent-green);
+  color: var(--text-light);
+}
+.question {
+  background-color: #1a1a1c;
+  padding: 16px;
+  margin: 0 auto 16px auto;
+  max-width: 720px;
+  border-radius: 8px;
+}
+.summary-container {
+  max-width: 720px;
+  margin: 0 auto 30px auto;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 24px;
+}
+.incorrect-question {
+  border: 2px solid #ef4444; /* 紅色外框 */
+}
+
+</style>
+</head>
+<body>
+	<header class="navbar">
+	<div class="navbar-container">
+		<div class="logo">Logo</div>
+		<div class="nav-links">
+			<div>資料中心</div>
+			<div>商城</div>
+			<div>經驗值</div>
+			<div>設定</div>
+		</div>
+	</div>
+</header>
+
+<main class="main-container">
+  <div class="header-box">
+    <div class="section-title">測驗解答</div>
+
+    <div class="result-summary">
+      <div class="score-summary">
+        <div class="score-text">
+          總分：<span id="score"></span> 分
+        </div>
+        <div class="score-details">
+          答對 <span id="correct"></span> 題， 答錯 <span id="wrong"></span> 題， 共 <span id="total"></span> 題 <br />
+          🌟 本次獲得經驗值：<span id="exp"></span> EXP
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="questionArea"></div>
+
+  <div class="button-group">
+    <button onclick="location.href='index.html'">🏠 回首頁</button>
+    <button onclick="location.href='quizhistory.html'">📖 返回紀錄</button>
+  </div>
+</main>
+
+
+
+	<footer>客服信箱</footer>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+	  const params = new URLSearchParams(location.search);
+	  const videoId = params.get("videoId");
+	  const userId = parseInt(params.get("userId"));
+	  const attemptId = params.get("attemptId");
+	  const contextPath = "/videotest";
+
+	  function normalize(str) {
+	    return (str || "").replace(/[\s\p{P}\p{S}（）]+/gu, "").toLowerCase();
+	  }
+
+	  function getIndexes(item) {
+	    const options = [item.option1, item.option2, item.option3, item.option4];
+	    let userIndex = parseInt(item.selectedIndex ?? item.selected_option);
+	    if (isNaN(userIndex)) {
+	      const sel = (item.selected_option || "").toUpperCase();
+	      if (["A", "B", "C", "D"].includes(sel)) {
+	        userIndex = sel.charCodeAt(0) - 65;
+	      } else {
+	        const match = options.findIndex(opt => normalize(opt) === normalize(item.selected_option));
+	        if (match !== -1) userIndex = match;
+	      }
+	    }
+
+	    let correctIndex = parseInt(item.correctIndex ?? item.correct_index);
+	    if (isNaN(correctIndex)) {
+	      const match = options.findIndex(opt => normalize(opt) === normalize(item.answer));
+	      if (match !== -1) correctIndex = match;
+	    }
+
+	    const isCorrect = userIndex === correctIndex && correctIndex >= 0 && userIndex >= 0;
+	    return { userIndex, correctIndex, options, isCorrect };
+	  }
+
+	  fetch(`${contextPath}/api/answerDetail?videoId=${videoId}&userId=${userId}&attemptId=${attemptId}`)
+	    .then(res => res.json())
+	    .then(data => {
+	      let total = 0, correct = 0;
+	      const container = document.getElementById("questionArea");
+
+	      data.forEach((item, idx) => {
+	        const { userIndex, correctIndex, options, isCorrect } = getIndexes(item);
+	        if (userIndex >= 0 && correctIndex >= 0) {
+	          total++;
+	          if (isCorrect) correct++;
+	        }
+
+	        const box = document.createElement("div");
+	        box.className = "question-container" + (isCorrect ? "" : " incorrect-question");
+	        const status = isCorrect ? "status-correct" : "status-incorrect";
+
+	        // ✅ 把整段 HTML 用 template literal 包起來並賦值給 innerHTML
+	        box.innerHTML = `
+	          <div class="question-header">
+	            <div>Q${idx + 1}. <span class="question-status ${status}">${isCorrect ? "答對" : "答錯"}</span></div>
+	          </div>
+	          <div class="question-text">${item.question}</div>
+	          <div class="options">
+	            ${options.map((opt, i) => {
+	              let cls = "";
+	              if (i === correctIndex) cls = "correct";
+	              else if (i === userIndex && !isCorrect) cls = "user-wrong";
+	              return `<div class="option ${cls}"><strong>${String.fromCharCode(65 + i)}.</strong> ${opt}</div>`;
+	            }).join("")}
+	          </div>
+	          <div class="explanation">解析：<br>${item.explanation || "未提供解析"}</div>
+	        `;
+
+	        container.appendChild(box);
+
+	      });
+
+	      const wrong = total - correct;
+	      const score = correct * 25;
+
+	      document.getElementById("exp").textContent = score;
+	      document.getElementById("score").textContent = score;
+	      document.getElementById("wrong").textContent = wrong;
+	      document.getElementById("total").textContent = total;
+	      document.getElementById("correct").textContent = correct;
+	      
+	    })
+	    .catch(err => {
+	      console.error("❌ 載入錯誤詳解失敗", err);
+	      alert("無法載入測驗結果，請稍後再試");
+	    });
+	});
+
+</script>
+</body>
+</html>
