@@ -42,13 +42,13 @@ public class GoogleLoginController {
                 String username = (String) payload.get("username");
 
                 // 檢查使用者是否已存在
-                String sqlCheck = "SELECT COUNT(*) FROM member WHERE email = :email";
+                String sqlCheck = "SELECT COUNT(*) FROM members WHERE email = :email";
                 MapSqlParameterSource checkParam = new MapSqlParameterSource("email", email);
                 Integer count = jdbc.queryForObject(sqlCheck, checkParam, Integer.class);
 
                 if (count == 0) {
                     // 第一次登入 → 自動註冊
-                    String sqlInsert = "INSERT INTO member (email, password, username) " +
+                    String sqlInsert = "INSERT INTO members (email, password, username) " +
                             "VALUES (:email, :password, :username)";
                     MapSqlParameterSource insertParam = new MapSqlParameterSource()
                             .addValue("email", email)
