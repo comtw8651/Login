@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>題目設定</title>
+  <style>
+    /* 從 setting.html 複製的根變數 */
+    :root {
+      --bg-primary: #0d0d0f;
+      --bg-secondary: #1a1a1c;
+      --text-light: #c3c3c3;
+      --bg-bot-input: #2a2a2e;
+      --text-bot: #e5e7eb;
+      --bg-user: #3e3e42;
+      --text-user: #f3f4f6;
+      --border-input: #2c2c2e;
+      --placeholder: #6b7280;
+      --btn-disabled: #4b5563;
+      --accent-green: #61f6d6;
+      --accent-hover: #4fd1b1;
+      --white: #ffffff;
+      --black: #0d0d0f;
+      --nav-hover: #ffffff;
+      --sidebar-hover: #4fd1b1;
+      --box-shadow-dark: rgba(0, 0, 0, 0.18);
+      --box-shadow-medium: rgba(0, 0, 0, 0.13);
+      --box-shadow-light: rgba(0, 0, 0, 0.10);
+      --box-shadow-strong: rgba(0, 0, 0, 0.17);
+    }
+
+    /* 主題變數 - 深藍色主題 */
+    .theme-blue {
+      --bg-primary: #0f1419;
+      --bg-secondary: #1e2a3a;
+      --text-light: #b8c5d1;
+      --bg-bot-input: #2a3441;
+      --text-bot: #d4e1ed;
+      --bg-user: #3a4a5c;
+      --text-user: #e6f1ff;
+      --border-input: #34424f;
+      --placeholder: #6b7c8a;
+      --btn-disabled: #4a5866;
+      --white: #ffffff;
+      --black: #0f1419;
+      --accent-green: #4a9eff;
+      --accent-hover: #3a8eef;
+    }
+
+    /* 主題變數 - 粉色主題 */
+    .theme-pink {
+      --bg-primary: #fdf2f8;
+      --bg-secondary: #fce7f3;
+      --text-light: #881c4f;
+      --white: #881c4f;
+      --black: #fdf2f8;
+      --bg-bot-input: #fbcfe8;
+      --text-bot: #881c4f;
+      --bg-user: #db2777;
+      --text-user: #fdf2f8;
+      --border-input: #be185d;
+      --placeholder: #9d174d;
+      --btn-disabled: #fbcfe8;
+      --accent-green: #ec4899;
+      --accent-hover: #db2777;
+    }
+
+    /* 主題變數 - 天空藍主題 */
+    .theme-sky {
+      --bg-primary: #f0f9ff;
+      --bg-secondary: #e0f2fe;
+      --text-light: #0c4a6e;
+      --white: #0c4a6e;
+      --black: #f0f9ff;
+      --bg-bot-input: #bae6fd;
+      --text-bot: #0c4a6e;
+      --bg-user: #0ea5e9;
+      --text-user: #f0f9ff;
+      --border-input: #38bdf8;
+      --placeholder: #075985;
+      --btn-disabled: #bae6fd;
+      --accent-green: #0ea5e9;
+      --accent-hover: #0284c7;
+    }
+
+    /* 主題變數 - 亮色主題 */
+    .theme-light {
+      --bg-primary: rgb(237, 233, 223);
+      --bg-secondary: rgb(255, 251, 240);
+      --text-light: rgb(25, 20, 16);
+      --white: rgb(25, 20, 16);
+      --black: rgb(255, 251, 240);
+      --bg-bot-input: rgb(225, 221, 211);
+      --text-bot: rgb(25, 20, 16);
+      --bg-user: rgb(140, 136, 126);
+      --text-user: rgb(255, 251, 240);
+      --border-input: rgb(160, 160, 160);
+      --placeholder: rgb(100, 96, 86);
+      --btn-disabled: rgb(180, 176, 166);
+      --accent-green: #9ca3af;
+      --accent-hover: #6b7280;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      color: var(--text-light);
+      font-family: "Noto Sans TC", Arial, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body {
+      min-height: 100vh;
+      background: var(--bg-primary);
+    }
+
+    /* Header */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-secondary);
+      color: var(--text-light);
+      padding: 16px 24px;
+      font-size: 1.3em;
+    }
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 24px;
+      box-sizing: border-box;
+    }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links > div { 
+      position: relative; 
+      padding: 0 1rem; 
+      cursor: pointer; 
+      color: var(--text-light);
+      transition: color 0.2s ease;
+    }
+    .nav-links > div::before,
+    .nav-links > div::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; height: 2px;
+      background: var(--text-light);
+      transform: scaleX(0);
+      transition: transform 0.15s ease;
+    }
+    .nav-links > div::before { top: -16px; }
+    .nav-links > div::after  { bottom: -16px; }
+    .nav-links > div:hover { color: var(--white); }
+    .nav-links > div:hover::before,
+    .nav-links > div:hover::after { transform: scaleX(1); }
+
+    .nav-current-page {
+      color: var(--white) !important;
+    }
+
+    /* 主內容區域 */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    /* 配置對話框 */
+    .config-dialog {
+      background: var(--bg-secondary);
+      color: var(--text-light);
+      border-radius: 12px;
+      padding: 40px;
+      min-width: 500px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      animation: slideInUp 0.5s ease-out;
+      position: relative;
+    }
+
+    .config-dialog.animate-from-button {
+      animation: slideInFromButton 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes slideInFromButton {
+      from {
+        opacity: 0;
+        transform: translate(var(--start-x, 0), var(--start-y, 0)) scale(0.3);
+      }
+      to {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+    }
+
+    .config-item {
+      margin-bottom: 30px;
+    }
+
+    .config-item:last-of-type {
+      margin-bottom: 40px;
+    }
+
+    .config-label {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-light);
+      display: block;
+    }
+
+    /* 輸入框容器 */
+    .input-container {
+      position: relative;
+    }
+
+    /* 輸入框樣式 */
+    .config-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-input);
+      border-radius: 6px;
+      background: var(--bg-bot-input);
+      color: var(--text-light);
+      font-size: 1.1em;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    .config-input:focus {
+      outline: none;
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 2px rgba(97, 246, 214, 0.2);
+    }
+
+    .config-input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    .config-input.success {
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .config-input::placeholder {
+      color: var(--placeholder);
+      opacity: 0.8;
+    }
+
+    /* 輸入提示文字 */
+    .input-hint {
+      font-size: 0.9em;
+      margin-top: 6px;
+      min-height: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .input-hint.error {
+      color: #ef4444;
+    }
+
+    .input-hint.success {
+      color: #10b981;
+    }
+
+    .input-hint.info {
+      color: var(--placeholder);
+    }
+
+    /* 難易度選擇樣式 */
+    .difficulty-options {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+      justify-content: center;
+    }
+
+    .difficulty-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border: 1px solid var(--border-input);
+      border-radius: 6px;
+      background: var(--bg-bot-input);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .difficulty-option:hover {
+      border-color: var(--accent-green);
+      background: var(--bg-user);
+    }
+
+    .difficulty-option input[type="radio"] {
+      margin: 0;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-green);
+      cursor: pointer;
+    }
+
+    .difficulty-option label {
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 1em;
+      margin: 0;
+    }
+
+    .difficulty-option.selected {
+      border-color: var(--accent-green);
+      background: var(--bg-user);
+    }
+
+    /* 確認按鈕 */
+    .confirm-btn {
+      font-family: var(--body-font, Inter, "Noto Sans TC", Arial, sans-serif);
+      font-size: 1.02rem;
+      font-weight: 600;
+      min-width: 9.5em;
+      min-height: 2.3em;
+      letter-spacing: 0.01em;
+      border: none;
+      background: var(--border-input);
+      color: var(--text-light);
+      box-shadow: 0 2px 12px var(--box-shadow-medium), 0 1.5px 4px var(--box-shadow-light);
+      cursor: pointer;
+      transition: background 0.2s cubic-bezier(.4, .09, .35, 1), color 0.2s, box-shadow .18s cubic-bezier(.4, .09, .35, 1);
+      user-select: none;
+      display: flex;
+      line-height: 1;
+      justify-content: center;
+      align-items: center;
+      height: 2rem;
+      text-decoration: none;
+      padding: 0 0.25rem;
+      margin: 20px auto 0 auto;
+      border-radius: 4px;
+      position: static;
+      float: none;
+    }
+
+    .confirm-btn::before {
+      display: none;
+    }
+
+    .confirm-btn:hover,
+    .confirm-btn:focus-visible {
+      outline: none;
+      background: var(--bg-user);
+      color: var(--text-light);
+      box-shadow: 0 4px 24px var(--box-shadow-strong), 0 2px 8px var(--box-shadow-medium);
+      transform: none;
+    }
+
+    .confirm-btn:disabled {
+      background: var(--btn-disabled);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .confirm-btn:disabled:hover {
+      background: var(--btn-disabled);
+      box-shadow: 0 2px 12px var(--box-shadow-medium), 0 1.5px 4px var(--box-shadow-light);
+      transform: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-secondary);
+      color: var(--text-light);
+      width: 100%;
+      padding: 18px 0;
+      text-align: center;
+      font-size: 1.14em;
+      transition: all 0.3s ease;
+    }
+
+    .footer:hover {
+      background: var(--bg-user);
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 12px;
+      }
+
+      .nav-links {
+        gap: 15px;
+        font-size: 0.9em;
+      }
+
+      .config-dialog {
+        min-width: auto;
+        margin: 20px;
+        padding: 30px 20px;
+      }
+
+      .config-label {
+        font-size: 1.1em;
+      }
+
+      .nav-links > div {
+        padding: 0 0.5rem;
+      }
+      
+      .difficulty-options {
+        gap: 8px;
+        justify-content: center;
+      }
+      
+      .difficulty-option {
+        padding: 10px 12px;
+        flex: 1;
+        max-width: 120px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 10px;
+      }
+
+      .nav-links > div {
+        font-size: 0.8em;
+        padding: 0 0.3rem;
+      }
+
+      .config-dialog {
+        padding: 25px 15px;
+      }
+    }
+
+    /* 載入動畫 */
+    .loading {
+      opacity: 0;
+      animation: fadeInLoad 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes fadeInLoad {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 通知動畫 */
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    
+    @keyframes slideOutUp {
+      from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-100%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-container">
+      <div class="logo">Logo</div>
+      <div class="nav-links">
+        <div>測驗中心</div>
+        <div>商城</div>
+        <div>經驗值</div>
+        <div>設定</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <form class="config-dialog" id="settingForm">
+      <div class="config-item">
+        <label class="config-label">總題數</label>
+        <input type="text" id="totalQuestions" class="config-input" placeholder="請輸入 1~30 的整數" maxlength="2">
+        <div class="input-hint" id="questionHint">請輸入 1 到 30 的正整數</div>
+      </div>
+
+      <div class="config-item">
+        <label class="config-label">難易度</label>
+        <div class="difficulty-options">
+          <div class="difficulty-option">
+            <input type="radio" name="difficulty" value="easy" id="easy">
+            <label for="easy">簡單</label>
+          </div>
+          <div class="difficulty-option">
+            <input type="radio" name="difficulty" value="medium" id="medium" checked>
+            <label for="medium">普通</label>
+          </div>
+          <div class="difficulty-option">
+            <input type="radio" name="difficulty" value="hard" id="hard">
+            <label for="hard">困難</label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="confirm-btn">確認</button>
+    </form>
+  </main>
+
+  <footer class="footer">客服信箱</footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("settingForm");
+      const input = document.getElementById("totalQuestions");
+      const hint = document.getElementById("questionHint");
+      const difficultyOptions = document.querySelectorAll(".difficulty-option");
+
+      // 點擊整個難度選項
+      difficultyOptions.forEach(option => {
+        option.addEventListener("click", () => {
+          option.querySelector("input").checked = true;
+          updateSelectedOption();
+        });
+      });
+
+      function updateSelectedOption() {
+        difficultyOptions.forEach(option => {
+          const radio = option.querySelector("input");
+          option.classList.toggle("selected", radio.checked);
+        });
+      }
+
+      updateSelectedOption();
+
+      input.addEventListener("input", () => {
+        const val = parseInt(input.value);
+        input.classList.remove("error", "success");
+        hint.classList.remove("error", "success");
+
+        if (isNaN(val) || val < 1 || val > 30) {
+          input.classList.add("error");
+          hint.classList.add("error");
+          hint.textContent = "請輸入 1~30 的整數";
+        } else {
+          input.classList.add("success");
+          hint.classList.add("success");
+          hint.textContent = `共 ${val} 題`;
+        }
+      });
+
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        const quizNum = parseInt(input.value);
+        const difficulty = document.querySelector("input[name='difficulty']:checked")?.value;
+        const videoId = new URLSearchParams(window.location.search).get("videoId");
+
+        if (!quizNum || isNaN(quizNum) || quizNum < 1 || quizNum > 30) {
+          showNotification("請輸入有效題數（1～30）", "error");
+          return;
+        }
+
+        if (!difficulty) {
+          showNotification("請選擇難易度", "error");
+          return;
+        }
+
+        const url = `quiz.html?videoId=${encodeURIComponent(videoId)}&quizNum=${quizNum}&difficulty=${difficulty}`;
+        window.location.href = url;
+      };
+
+      function showNotification(msg, type = "info") {
+        const existing = document.querySelector(".notification");
+        if (existing) existing.remove();
+
+        const n = document.createElement("div");
+        n.className = `notification ${type}`;
+        n.textContent = msg;
+        document.body.appendChild(n);
+
+        setTimeout(() => {
+          n.style.opacity = "0";
+          setTimeout(() => n.remove(), 300);
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
