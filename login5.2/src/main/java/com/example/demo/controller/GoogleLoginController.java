@@ -62,7 +62,7 @@ public class GoogleLoginController {
 
                 // 存入 Session
                 session.setAttribute("username", username);
-                session.setAttribute("email", email);
+                session.setAttribute("loggedInUserEmail", email);
 
                 // 導向 welcome
                 response.sendRedirect("/welcome");
