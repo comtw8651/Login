@@ -39,7 +39,8 @@ public class GoogleLoginController {
             if (idTokenObj != null) {
                 GoogleIdToken.Payload payload = idTokenObj.getPayload();
                 String email = payload.getEmail();
-                String username = (String) payload.get("username");
+                String googleName = (String) payload.get("name");
+                String username = googleName;
 
                 // 檢查使用者是否已存在
                 String sqlCheck = "SELECT COUNT(*) FROM members WHERE email = :email";
@@ -62,7 +63,7 @@ public class GoogleLoginController {
 
                 // 存入 Session
                 session.setAttribute("username", username);
-                session.setAttribute("loggedInUserEmail", email);
+                session.setAttribute("email", email);
 
                 // 導向 welcome
                 response.sendRedirect("/welcome");
